@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio</title>
+  <meta name="description" content="Welcome to Kushagra's interactive portfolio. Discover projects, skills, and contact information.">
+  <meta name="keywords" content="portfolio, Kushagra, projects, skills, contact">
+  <meta name="author" content="Kushagra Agarwal">
+  <meta property="og:title" content="Kushagra's Portfolio">
+  <meta property="og:description" content="Explore my interactive portfolio showcasing my projects and skills.">
+  <!-- <meta property="og:image" content="path/to/image.jpg"> Replace with actual image path -->
+  <meta property="og:url" content="https://kush3008.github.io/Hammer-Time-Gamedev/">
+  <!-- <meta name="twitter:card" content="summary_large_image"> -->
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        /* Add this to your existing CSS in index.html */
+    body {
+      background: rgb(54, 2, 54);
+      color: white;
+      font-family: 'Press Start 2P', sans-serif;
+      transition: background-color 2s; /* Smooth background transition */
+    }
+
+    .canvas-container {
+      transition: transform 10s, opacity 10s; /* Smooth transitions for canvas */
+    }
+
+    .fade-out {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+
+    #bio {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      max-width: 90%;
+    }
+    canvas {
+      display: block;
+      margin: 0 auto;
+      background: black;
+      width: 90%; /* Make canvas responsive */
+      height: auto; /* Maintain aspect ratio */
+    }
+    #cheatCode {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+    #Instructions {
+      text-align: center;
+      margin-top: -115px;
+    }
+
+        /* Add this CSS to your existing stylesheet */
+    #loadingIndicator {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Press Start 2P', sans-serif;
+      color: white;
+      display: none;
+    }
+
+    #loadingIndicator.visible {
+      display: block;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="bio" role="contentinfo" aria-label="Introduction">
+    <h1>Hello there! I am Kushagra... </h1>
+    <p>Welcome to my interactive portfolio, hope you have a good time :3</p>
+  </div>
+  <canvas role="img" aria-label="Game Canvas"></canvas>
+  <div id="Instructions" role="note">Use W A D to move, W to enter door</div>
+  <div id="cheatCode" role="note">Press cheat code: left(A) right(D) up(W) up(W) for resume</div>
+  <div id="loadingIndicator">Loading...</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.1/gsap.min.js" integrity="sha512-qF6akR/fsZAB4Co1QDDnUXWnaQseLGXoniuSuSlPQK6+aWhlMZcHzkasCSlnWoe+TJuudlka1/IQ01Dnhgq95g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/data/collisions.js"></script>
+  <script src="js/classes/Collision.js"></script>
+  <script src="js/classes/Sprite.js"></script>
+  <script src="js/classes/Player.js"></script>
+  <script src="js/event.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
