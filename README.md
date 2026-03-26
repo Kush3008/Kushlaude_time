@@ -7,7 +7,7 @@
 ### Description:
 This project is a simple HTML5 canvas-based game implemented using JavaScript. It features a player character controlled by the `W`, `A`, and `D` keys to navigate through various levels while avoiding obstacles and enemies. The game utilizes sprites for animations, collision detection, and level progression.
 
-https://kush3008.github.io/Hammer-Time-Gamedev/
+(https://kush3008.github.io/Kushlaude_time/)
 
 ---
 
