@@ -83,9 +83,11 @@ class Player extends Sprite {
 
     // Secret passage logic
     if (this.position.x + this.width >= canvas.width) {
-      level = 5; // Assuming the secret level is 5
-      levels[level].init();
-      updateText(level);
+      level = 5;
+      if (levels[level]) {
+        levels[level].init();
+        updateText(level);
+      }
     }
   }
 

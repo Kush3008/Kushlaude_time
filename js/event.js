@@ -46,11 +46,11 @@ window.addEventListener('keydown', (event) => {
 
           setTimeout(() => {
             if (i === 0) {
-              window.location.href = 'https://www.linkedin.com/in/kushagra-agarwal-88614b219/';
+              redirectTo('https://www.linkedin.com/in/kushagra-agarwal-88614b219/');
             } else if (i === 1) {
-              window.location.href = 'https://github.com/Kush3008';
+              redirectTo('https://github.com/Kush3008');
             } else if (i === 2) {
-              window.location.href = 'https://www.behance.net/Kush3008';
+              redirectTo('https://www.behance.net/Kush3008');
             }
           }, 1000); // Delay for animation
 
@@ -75,7 +75,7 @@ window.addEventListener('keydown', (event) => {
 
   // Check if the actionSequence matches the requiredSequence
   if (JSON.stringify(actionSequence) === JSON.stringify(requiredSequence)) {
-    window.location.href = 'https://drive.google.com/file/d/1py7ypsmaevFG1JMuugt57QmmQCeXQtuq/view?usp=sharing'; // Redirect to secret website
+    redirectTo('https://drive.google.com/file/d/1py7ypsmaevFG1JMuugt57QmmQCeXQtuq/view?usp=sharing'); // Redirect to secret website
     actionSequence.length = 0; // Reset sequence after successful activation
   }
 });

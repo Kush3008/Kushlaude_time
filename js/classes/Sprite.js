@@ -19,7 +19,6 @@ class Sprite {
 		}
 	  }
   
-	  console.log(this.animations);
   
 	  this.image.onload = () => {
 		this.loaded = true;

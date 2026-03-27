@@ -1,14 +1,14 @@
-Array.prototype.parse2D = function () {
+function parse2D(arr) {
     const rows = [];
-    for (let i = 0; i < this.length; i += 16) {
-        rows.push(this.slice(i, i + 16));
+    for (let i = 0; i < arr.length; i += 16) {
+        rows.push(arr.slice(i, i + 16));
     }
     return rows;
 }
 
-Array.prototype.createObjectsFrom2D = function () {
+function createObjectsFrom2D(arr) {
     const objects = [];
-    this.forEach((row, y) => {
+    arr.forEach((row, y) => {
         row.forEach((symbol, x) => {
             if (symbol === 292 || symbol === 250) {
                 objects.push(
