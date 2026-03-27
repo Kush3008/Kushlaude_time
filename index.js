@@ -23,7 +23,6 @@ const player = new Player({
       loop: false,
       imageSrc: './img/king/enterDoor.png',
       onComplete: () => {
-        console.log('complete animation');
         gsap.to(overlay, {
           opacity: 1,
           onComplete: () => {
@@ -39,60 +38,133 @@ const player = new Player({
 });
 
 const pageTexts = {
-  1: '<h1>Hello there! I am Kushagra... </h1><p>Welcome to my interactive portfolio, hope you have a good time :3</p>',
+  0: '<h1>Hello there! I am Kushagra... </h1><p>Welcome to my interactive portfolio, hope you have a good time :3</p>',
 };
 
-function updateText(level) {
+function updateText(roomIndex) {
   const bio = document.getElementById('bio');
-  bio.innerHTML = pageTexts[level] || '';
+  bio.innerHTML = pageTexts[roomIndex] || '';
 }
 
-let level = 1;
-const levels = {
-  1: {
-    init: () => {
-      parsedCollisions = parse2D(collisionsLevel1);
-      collisionBlocks = createObjectsFrom2D(parsedCollisions);
-      player.collisionBlocks = collisionBlocks;
-      player.position = { x: 200, y: 200 }; // Ensure player starts at the correct position
-      if (player.currentAnimation) player.currentAnimation.isActive = false;
+let currentRoom = 0;
 
-      background = new Sprite({
-        position: { x: 0, y: 0 },
-        imageSrc: './img/backgroundLevel1.png',
-      });
-
-      doors = [
-        new Sprite({
-          position: { x: 350, y: 270 }, // LinkedIn Door
-          imageSrc: './img/doorOpen.png',
-          frameRate: 5,
-          frameBuffer: 5,
-          loop: false,
-          autoplay: false,
-        }),
-        new Sprite({
-          position: { x: 550, y: 270 }, // GitHub Door
-          imageSrc: './img/doorOpen.png',
-          frameRate: 5,
-          frameBuffer: 5,
-          loop: false,
-          autoplay: false,
-        }),
-        new Sprite({
-          position: { x: 750, y: 270 }, // Behance Door
-          imageSrc: './img/doorOpen.png',
-          frameRate: 5,
-          frameBuffer: 5,
-          loop: false,
-          autoplay: false,
-        }),
-      ];
-
-      updateText(1); // Update text for home page
-    },
+const rooms = [
+  {
+    name: 'Home',
+    backgroundSrc: './img/backgroundLevel1.png',
+    collisionData: collisionsLevel1,
+    doors: [
+      {
+        position: { x: 350, y: 270 },
+        label: 'LinkedIn', labelX: 358, labelY: 260,
+        target: { type: 'external', url: 'https://www.linkedin.com/in/kushagra-agarwal-88614b219/' },
+      },
+      {
+        position: { x: 550, y: 270 },
+        label: 'GitHub', labelX: 565, labelY: 260,
+        target: { type: 'external', url: 'https://github.com/Kush3008' },
+      },
+      {
+        position: { x: 750, y: 270 },
+        label: 'Behance', labelX: 762, labelY: 260,
+        target: { type: 'external', url: 'https://www.behance.net/Kush3008' },
+      },
+    ],
+    interactables: [],
   },
-};
+  {
+    name: 'Room 2',
+    backgroundSrc: './img/backgroundLevel2.png',
+    collisionData: collisionsLevel2,
+    doors: [],
+    interactables: [],
+  },
+  {
+    name: 'Room 3',
+    backgroundSrc: './img/backgroundLevel3.png',
+    collisionData: collisionsLevel3,
+    doors: [],
+    interactables: [],
+  },
+  {
+    name: 'Room 4',
+    backgroundSrc: './img/backgroundLevel2.png',
+    collisionData: collisionsLevel2,
+    doors: [],
+    interactables: [],
+  },
+  {
+    name: 'Room 5',
+    backgroundSrc: './img/backgroundLevel3.png',
+    collisionData: collisionsLevel3,
+    doors: [],
+    interactables: [],
+  },
+];
+
+function initRoom(index) {
+  const room = rooms[index];
+
+  parsedCollisions = parse2D(room.collisionData);
+  collisionBlocks = createObjectsFrom2D(parsedCollisions);
+  player.collisionBlocks = collisionBlocks;
+  if (player.currentAnimation) player.currentAnimation.isActive = false;
+
+  background = new Sprite({
+    position: { x: 0, y: 0 },
+    imageSrc: room.backgroundSrc,
+  });
+
+  doors = room.doors.map(function(def) {
+    var sprite = new Sprite({
+      position: def.position,
+      imageSrc: './img/doorOpen.png',
+      frameRate: 5,
+      frameBuffer: 5,
+      loop: false,
+      autoplay: false,
+    });
+    sprite.target = def.target;
+    sprite.label  = def.label;
+    sprite.labelX = def.labelX;
+    sprite.labelY = def.labelY;
+    return sprite;
+  });
+
+  updateText(index);
+}
+
+function transitionToRoom(index, spawnSide) {
+  if (index < 0 || index >= rooms.length) return;
+  if (player.preventInput) return;
+  player.preventInput = true;
+
+  gsap.to(overlay, {
+    opacity: 1,
+    duration: 0.3,
+    onComplete: function() {
+      currentRoom = index;
+      initRoom(index);
+      player.velocity.x = 0;
+      player.velocity.y = 0;
+      if (spawnSide === 'fromLeft') {
+        player.position = { x: 10, y: 200 };
+      } else {
+        player.position = { x: canvas.width - player.width - 70, y: 200 };
+      }
+      gsap.to(overlay, {
+        opacity: 0,
+        duration: 0.3,
+        onComplete: function() {
+          player.preventInput = false;
+        },
+      });
+    },
+  });
+}
+
+player.onRoomEdgeRight = function() { transitionToRoom(currentRoom + 1, 'fromLeft'); };
+player.onRoomEdgeLeft  = function() { transitionToRoom(currentRoom - 1, 'fromRight'); };
 
 const keys = {
   w: { pressed: false },
@@ -103,39 +175,27 @@ const keys = {
 const overlay = { opacity: 0 };
 
 function drawDoorText() {
-  if (level === 1) { // Show text in level 1
-    // Set default font style for all text
-    c.font = '10px "Press Start 2P"';
-    c.fillStyle = 'Orange';
+  c.font = '10px "Press Start 2P"';
+  c.fillStyle = 'Orange';
+  c.shadowColor = 'black';
+  c.shadowOffsetX = 1;
+  c.shadowOffsetY = 1;
+  c.shadowBlur = 2.25;
 
-    // Text shadow properties (adjust as needed)
-    const shadowXOffset = 1;
-    const shadowYOffset = 1;
-    const shadowBlur = 2.25;
-    const shadowColor = 'black';
+  doors.forEach(function(door) {
+    if (door.label) c.fillText(door.label, door.labelX, door.labelY);
+  });
 
-    // Draw "LinkedIn", "GitHub", "Behance" with stroke effect
-    c.shadowColor = shadowColor;
-    c.shadowOffsetX = shadowXOffset;
-    c.shadowOffsetY = shadowYOffset;
-    c.shadowBlur = shadowBlur;
-    c.fillText('LinkedIn', 358, 260);
-    c.fillText('GitHub', 565, 260);
-    c.fillText('Behance', 762, 260);
-
-    // Reset shadow properties for normal text rendering
-    c.shadowColor = 'none';
-    c.shadowOffsetX = 0;
-    c.shadowOffsetY = 0;
-    c.shadowBlur = 0;
-  }
+  c.shadowColor = 'none';
+  c.shadowOffsetX = 0;
+  c.shadowOffsetY = 0;
+  c.shadowBlur = 0;
 }
-
 
 function animate() {
   window.requestAnimationFrame(animate);
   background.draw();
-  doors.forEach((door) => door.draw());
+  doors.forEach(function(door) { door.draw(); });
   drawDoorText();
   player.handleInput(keys);
   player.draw();
@@ -148,7 +208,5 @@ function animate() {
   c.restore();
 }
 
-// Call init and updateText after defining pageTexts and updateText function
-levels[level].init();
+initRoom(0);
 animate();
-updateText(level);

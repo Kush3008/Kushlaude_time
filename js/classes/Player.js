@@ -81,13 +81,12 @@ class Player extends Sprite {
       }
     }
 
-    // Secret passage logic
-    if (this.position.x + this.width >= canvas.width) {
-      level = 5;
-      if (levels[level]) {
-        levels[level].init();
-        updateText(level);
-      }
+    // Room edge transitions
+    if (!this.preventInput && this.position.x + this.width >= canvas.width) {
+      if (typeof this.onRoomEdgeRight === 'function') this.onRoomEdgeRight();
+    }
+    if (!this.preventInput && this.position.x <= 0) {
+      if (typeof this.onRoomEdgeLeft === 'function') this.onRoomEdgeLeft();
     }
   }
 

@@ -45,12 +45,12 @@ window.addEventListener('keydown', (event) => {
           door.play();
 
           setTimeout(() => {
-            if (i === 0) {
-              redirectTo('https://www.linkedin.com/in/kushagra-agarwal-88614b219/');
-            } else if (i === 1) {
-              redirectTo('https://github.com/Kush3008');
-            } else if (i === 2) {
-              redirectTo('https://www.behance.net/Kush3008');
+            const target = door.target;
+            if (target.type === 'external') {
+              window.open(target.url, '_blank');
+              player.preventInput = false;
+            } else if (target.type === 'level') {
+              transitionToRoom(target.room, 'fromLeft');
             }
           }, 1000); // Delay for animation
 
